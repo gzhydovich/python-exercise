@@ -1,6 +1,6 @@
 import paramiko, socket, sys
 
-class SshClient:
+class SSHClient:
     def __init__(self, args):
         self.args = args
         try:
@@ -17,12 +17,12 @@ class SshClient:
 
 
     def create_user(self):
-            print("Creating user: " + self.args.new_user)
+            print("Creating user: ", self.args.new_user)
             _, stdout, stderr = self.ssh.exec_command('sudo useradd ' + self.args.new_user)
             decoded_stdout = stdout.read().decode('ascii').strip("\n")
             decoded_stderr = stderr.read().decode('ascii').strip("\n")
             if len(decoded_stderr) != 0:
-                    print(decoded_stderr)
+                print(decoded_stderr)
             if len(decoded_stdout) != 0:
                 print(decoded_stdout)
 
@@ -43,7 +43,7 @@ class SshClient:
             self.ssh.close()
 
     def delete_user(self):
-            print("Deleting user: " + self.args.delete_user)
+            print("Deleting user: ", self.args.delete_user)
             _, stdout, stderr = self.ssh.exec_command('sudo userdel ' + self.args.delete_user)
             decoded_stdout = stdout.read().decode('ascii').strip("\n")
             decoded_stderr = stderr.read().decode('ascii').strip("\n")

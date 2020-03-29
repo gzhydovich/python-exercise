@@ -4,7 +4,8 @@ __pycache__/
 user_administrator/__pycache__/
 *.py[cod]
 *$py.class
-
+initial-keypair.pem
+test.pem
 # C extensions
 *.so
 

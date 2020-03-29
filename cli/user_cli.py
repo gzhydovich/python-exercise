@@ -1,7 +1,7 @@
 import argparse
 import getpass
 
-from .ssh_client import SshClient
+from .ssh_client import SSHClient
 
 parser = argparse.ArgumentParser(description="Helps with administration of users on a specified host")
 subparsers = parser.add_subparsers(
@@ -20,12 +20,12 @@ parser_create.add_argument(
 )
 parser_create.add_argument(
     "--ssh-key",
-    help="SHH key file",
+    help="Path to SHH key file",
     type=str,
     required=True,
 )
 parser_create.add_argument(
-    "--new-user", "-nu",
+    "--new-user",
     help='User to be created',
     type=str,
     required=True,
@@ -46,7 +46,7 @@ parser_list.add_argument(
 )
 parser_list.add_argument(
     "--ssh-key",
-    help="SHH key file",
+    help="Path to SHH key file",
     type=str,
     required=True,
 )
@@ -66,7 +66,7 @@ parser_delete.add_argument(
 )
 parser_delete.add_argument(
     "--ssh-key",
-    help="SHH key file",
+    help="Path to SHH key file",
     type=str,
     required=True,
 )
@@ -83,13 +83,13 @@ parser_delete.add_argument(
 )
 
 args = parser.parse_args()
-client = SshClient(args)
+if not args.username:
+    args.username = getpass.getuser()
 
+client = SSHClient(args)
 if args.command == "create":
     client.create_user()
-
 if args.command == "list":
     client.list_users()
-
 if args.command == "delete":
     client.delete_user()
