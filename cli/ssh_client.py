@@ -1,11 +1,10 @@
 import paramiko, socket, sys
 
+def create_user(args):
+        ssh = ssh_session(args)
 
-def create_user(host, key_filename, new_user, username):
-        ssh = ssh_session(host, key_filename, username)
-
-        print("Creating user: " + new_user)
-        _, stdout, stderr = ssh.exec_command('sudo useradd ' + new_user)
+        print("Creating user: " + args.new_user)
+        _, stdout, stderr = ssh.exec_command('sudo useradd ' + args.new_user)
         decoded_stdout = stdout.read().decode('ascii').strip("\n")
         decoded_stderr = stderr.read().decode('ascii').strip("\n")
         if len(decoded_stderr) != 0:
@@ -16,8 +15,8 @@ def create_user(host, key_filename, new_user, username):
         print('Closing connection')
         ssh.close()
 
-def list_users(host, key_filename, username):
-        ssh = ssh_session(host, key_filename, username)
+def list_users(args):
+        ssh = ssh_session(args)
 
         awk_command = "awk -F: \'BEGIN{printf \"%-20s %-20s %-20s\\n\", \"USERNAME:\", \"ID:\", \"NAME:\"}; { printf \"%-20s %-20s %-20s\\n\", $1, $3, $5 }\' /etc/passwd"
         _, stdout, stderr = ssh.exec_command(awk_command)
@@ -31,11 +30,11 @@ def list_users(host, key_filename, username):
         print('\nClosing connection')
         ssh.close()
 
-def delete_user(host, key_filename, delete_user, username):
-        ssh = ssh_session(host, key_filename, username)
+def delete_user(args):
+        ssh = ssh_session(args)
 
-        print("Deleting user: " + delete_user)
-        _, stdout, stderr = ssh.exec_command('sudo userdel ' + delete_user)
+        print("Deleting user: " + args.delete_user)
+        _, stdout, stderr = ssh.exec_command('sudo userdel ' + args.delete_user)
         decoded_stdout = stdout.read().decode('ascii').strip("\n")
         decoded_stderr = stderr.read().decode('ascii').strip("\n")
         if len(decoded_stderr) != 0 :
@@ -46,16 +45,16 @@ def delete_user(host, key_filename, delete_user, username):
         print('Closing connection')
         ssh.close()
 
-def ssh_session(host, key_filename, username):
+def ssh_session(args):
     try:
-        rsa_key = paramiko.RSAKey.from_private_key_file(key_filename)
+        rsa_key = paramiko.RSAKey.from_private_key_file(args.ssh_key)
         ssh = paramiko.SSHClient()
         ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(host, pkey=rsa_key, username=username)
-        print("Connected to Server:", host, "User:", username)
+        ssh.connect(args.host, pkey=rsa_key, username=args.username)
+        print("Connected to Server:", args.host, "User:", args.username)
         return ssh
     except paramiko.AuthenticationException:
-        sys.exit("Error: Authentication problem - Server: " + host + " User: " + username)
+        sys.exit("Error: Authentication problem - Server: " + args.host + " User: " + args.username)
     except socket.error as e:
-        print("Error: Comunication problem - Server: " + host + " User: " + username)
+        print("Error: Comunication problem - Server: " + args.host + " User: " + args.username)
         sys.exit(e)
