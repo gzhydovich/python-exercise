@@ -1,17 +1,17 @@
 import argparse
 import getpass
-from .ssh_client import create_user, list_users, delete_user
+
+from .ssh_client import SshClient
 
 parser = argparse.ArgumentParser(description="Helps with administration of users on a specified host")
 subparsers = parser.add_subparsers(
-
-    help='Available commands',
+    dest='command',
+    help='Commands',
     required=True,
 )
 
 # Create
 parser_create = subparsers.add_parser('create', help='Creates a user on a specified host')
-parser_create.set_defaults(func=create_user)
 parser_create.add_argument(
     "--host",
     help="Host address",
@@ -38,7 +38,6 @@ parser_create.add_argument(
 
 # List
 parser_list = subparsers.add_parser('list', help='Returns a list of users on a specified host')
-parser_list.set_defaults(func=list_users)
 parser_list.add_argument(
     "--host",
     help="Host address",
@@ -59,7 +58,6 @@ parser_list.add_argument(
 
 # Delete
 parser_delete = subparsers.add_parser('delete', help='Deletes a user on a specified host')
-parser_delete.set_defaults(func=delete_user)
 parser_delete.add_argument(
     "--host",
     help="Host address",
@@ -85,8 +83,13 @@ parser_delete.add_argument(
 )
 
 args = parser.parse_args()
+client = SshClient(args)
 
-if not args.username:
-    args.username = getpass.getuser()
+if args.command == "create":
+    client.create_user()
 
-args.func(args)
+if args.command == "list":
+    client.list_users()
+
+if args.command == "delete":
+    client.delete_user()
