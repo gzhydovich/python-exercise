@@ -1,16 +1,21 @@
 # SSH USER CLI
 
 ## Prerequisites
-Python 3.8
-pip
+```bash
+$ python3 -V
+Python 3.8.2
+
+$ python -m pip --version
+pip 20.0.2 from ...
+```
 
 ## Getting started
-`python -m pip install --user -e .`
+`python3 setup.py develop`
 
 
 ## Usage
 ```bash
-$ python3 -m cli.user_cli -h
+$ ssh_user_cli -h
 usage: user_cli.py [-h] {create,list,delete} ...
 
 Helps with administration of users on a specified host
@@ -26,7 +31,7 @@ positional arguments:
 
 * CREATE
 ```bash
-$ python3 -m cli.user_cli create --host example.us-east-2.compute.amazonaws.com --ssh-key example.pem --user ec2-user --new-user gene-120
+$ ssh_user_cli create --host example.us-east-2.compute.amazonaws.com --ssh-key example.pem --user ec2-user --new-user gene-120
 Connected to Server: example.compute.amazonaws.com User: ec2-user
 Creating user: gene-120
 Closing connection
@@ -34,7 +39,7 @@ Closing connection
 
 * LIST
 ```bash
-$ python3 -m cli.user_cli list --host example.us-east-2.compute.amazonaws.com --ssh-key example.pem --user ec2-user
+$ ssh_user_cli list --host example.us-east-2.compute.amazonaws.com --ssh-key example.pem --user ec2-user
 Connected to Server: example.compute.amazonaws.com User: ec2-user
 USERNAME:            ID:                  NAME:
 root                 0                    root
@@ -50,7 +55,7 @@ Closing connection
 
 * DELETE
 ```bash
-$ python -m cli.user_cli delete --host example.us-east-2.compute.amazonaws.com --ssh-key example.pem --user ec2-user --delete-user gene-120
+$ ssh_user_cli delete --host example.us-east-2.compute.amazonaws.com --ssh-key example.pem --user ec2-user --delete-user gene-120
 Connected to Server: example.us-east-2.compute.amazonaws.com User: ec2-user
 Deleting user: gene-120
 Closing connection

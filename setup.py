@@ -13,4 +13,10 @@ setup(
     description='Tool to provide user administration capabilities on remote Linux host',
     zip_safe=False,
     install_requires=requirements,
+    entry_points={
+        'console_scripts': [
+            # command = package.module:function
+            'ssh_user_cli = cli.user_cli:main',
+        ],
+    },
 )
