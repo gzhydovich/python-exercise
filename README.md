@@ -10,8 +10,11 @@ pip 20.0.2 from ...
 ```
 
 ## Getting started
+`git clone https://github.com/yzhydovich/python-exercise.git`
+
 `python3 setup.py develop`
 
+`export PATH=/path/to/bin:$PATH`
 
 ## Usage
 ```bash
